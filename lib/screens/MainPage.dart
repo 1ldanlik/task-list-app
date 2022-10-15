@@ -25,55 +25,62 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    taskList.add(Task('title', true));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: FittedBox(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Tasks',
-                    style: TextStyle(fontSize: 56),
-                  ),
-                  SizedBox(
-                    width: 46,
-                    height: 46,
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(EdgeInsets.zero),
-                            backgroundColor: getColor(const Color(0xFFF2F3FF),
-                                const Color(0xFFD6F0BF))),
-                        onPressed: () {},
-                        child: const Center(
-                            child: Icon(
-                              Icons.add,
-                              color: Color(0xFF575767),
-                              size: 36,
-                            ))),
-                  )
-                ],
-              ),
-              const SizedBox(height: 32,),
-              ListView.builder(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Text(
+                  'Tasks',
+                  style: TextStyle(fontSize: 56),
+                ),
+                SizedBox(
+                  width: 46,
+                  height: 46,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          backgroundColor: getColor(const Color(0xFFF2F3FF),
+                              const Color(0xFFD6F0BF))),
+                      onPressed: () {},
+                      child: const Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Color(0xFF575767),
+                            size: 36,
+                          ))),
+                )
+              ],
+            ),
+            const SizedBox(height: 32,),
+            Flexible(
+              child: ListView.builder(
                 itemCount: taskList.length,
                   itemBuilder: (context, index) {
-                  return FittedBox(
-                    child: CheckboxListTile(
-                      onChanged: (value) {
-                        setState(() {
-                          taskList[index].isChecked = value!;
-                        });
-                      },
-                      title: Text(taskList[index].title),
-                      value: taskList[index].isChecked,
-                    ),
+                  return CheckboxListTile(
+                    activeColor: Colors.grey,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    onChanged: (value) {
+                      setState(() {
+                        taskList[index].isChecked = value!;
+                      });
+                    },
+                    title: Text(taskList[index].title),
+                    value: taskList[index].isChecked,
                   );
                   }),
-              const SizedBox(height: 32,),
-            ],
-          ),
+            ),
+            const SizedBox(height: 32,),
+          ],
         ),
       ),
     );
