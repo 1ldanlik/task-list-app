@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../entity/task.dart';
+import '../utils/change_app_theme.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -11,9 +12,10 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   List<Task> _taskList = [];
-  late TextEditingController _controller;
+  late TextEditingController _controller = TextEditingController();
   bool _isVisibleTextField = false;
   bool _isEpmtyError = false;
+  FocusNode focusNode = FocusNode();
 
   MaterialStateProperty<Color>? getColor(Color color, Color colorPressed) {
     final getColor = (Set<MaterialState> states) {
@@ -37,7 +39,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    if(mounted) {
+    if (mounted) {
       _controller.dispose();
     }
 
@@ -46,9 +48,29 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appThemeState = ChangeAppTheme.of(context);
     return Scaffold(
+      backgroundColor: appThemeState!.isDarkMode ? const Color(0xFF29292F) : null,
       appBar: AppBar(
-        title: const Text('Список задач'),
+        backgroundColor: appThemeState.isDarkMode ? const Color(0xFF1E1F25) : null,
+        title: Text(
+          'Список задач',
+          style: TextStyle(
+            color: appThemeState.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () =>
+              appThemeState.isDarkMode
+                  ? appThemeState.toLightMode()
+                  : appThemeState.toDarkMode(),
+            icon: Icon(
+              appThemeState.isDarkMode ? Icons.mode_night : Icons.sunny,
+              color: appThemeState.isDarkMode ? Colors.white : Colors.black,
+            ),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 32),
@@ -60,9 +82,15 @@ class _MainPageState extends State<MainPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Tasks',
-                    style: TextStyle(fontSize: 56, fontWeight: FontWeight.w800),
+                    style: TextStyle(
+                      fontSize: 56,
+                      fontWeight: FontWeight.w800,
+                      color: appThemeState.isDarkMode
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                   SizedBox(
                     width: 46,
@@ -73,19 +101,19 @@ class _MainPageState extends State<MainPage> {
                             backgroundColor: getColor(const Color(0xFFF2F3FF),
                                 const Color(0xFFD6F0BF))),
                         onPressed: () {
-                          setState(() {
-                            if(_isVisibleTextField) {
-                              if(_controller.text.isNotEmpty) {
-                                _taskList.add(Task(_controller.text));
+                            if (_isVisibleTextField) {
+                              if (_controller.text.isNotEmpty) {
+                                _taskList.insert(0, Task(_controller.text));
                                 _controller.clear();
                                 _isEpmtyError = false;
                               } else {
                                 _isEpmtyError = true;
                               }
+                            } else {
+                              focusNode.requestFocus();
                             }
                             _isVisibleTextField = !_isVisibleTextField;
                             setState(() {});
-                          });
                         },
                         child: const Center(
                             child: Icon(
@@ -106,15 +134,19 @@ class _MainPageState extends State<MainPage> {
               Visibility(
                 visible: _isVisibleTextField,
                 child: TextField(
+                  style: TextStyle(
+                    color: appThemeState.isDarkMode ? Colors.white : Colors.black,
+                  ),
+                  focusNode: focusNode,
                   controller: _controller,
                 ),
               ),
               Visibility(
-                visible: _isEpmtyError,
-                child: const Text(
-                  "The task can't be empty", style: TextStyle(color: Colors.red),
-                )
-              ),
+                  visible: _isEpmtyError,
+                  child: const Text(
+                    "The task can't be empty",
+                    style: TextStyle(color: Colors.red),
+                  )),
               const SizedBox(
                 height: 32,
               ),
@@ -128,7 +160,10 @@ class _MainPageState extends State<MainPage> {
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
                           color: Colors.red,
-                          child: const Icon(Icons.delete, color: Colors.white,),
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
                         ),
                         onDismissed: (value) {
                           setState(() {
@@ -143,7 +178,18 @@ class _MainPageState extends State<MainPage> {
                               _taskList[index].isChecked = value!;
                             });
                           },
-                          title: Text(_taskList[index].title),
+                          side: const BorderSide(
+                            color: Colors.grey,
+                            width: 2
+                          ),
+                          title: Text(
+                            _taskList[index].title,
+                            style: TextStyle(
+                              color: appThemeState.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
                           value: _taskList[index].isChecked,
                         ),
                       );
