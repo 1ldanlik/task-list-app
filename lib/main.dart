@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:task_list_app/screens/root_widget.dart';
+import 'package:task_list_app/screens/main_page.dart';
+import 'package:task_list_app/widgets/root_widget.dart';
+import 'package:task_list_app/widgets/task_list_root_widget.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const RootWidget(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RootWidget(),
+      home: TaskListRootWidget(
+        child: MainPage(),
+      ),
     );
   }
 }

@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:task_list_app/screens/main_page.dart';
+import 'package:task_list_app/main.dart';
 import 'package:task_list_app/utils/change_app_theme.dart';
 
 class RootWidget extends StatefulWidget {
+  const RootWidget({
+    Key? key,
+    required this.child
+  }) : super(key: key);
+
+  final Widget child;
+
   @override
   State<RootWidget> createState() => _RootWidgetState();
 }
@@ -30,7 +37,7 @@ class _RootWidgetState extends State<RootWidget> {
       isDarkMode: isDarkMode,
       toDarkMode: toDarkMode,
       toLightMode: toLightMode,
-      child: MainPage(),
+      child: const MyApp(),
     );
   }
 }

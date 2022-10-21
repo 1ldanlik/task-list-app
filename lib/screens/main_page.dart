@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_list_app/utils/task_list.dart';
 
-import '../entity/task.dart';
 import '../utils/change_app_theme.dart';
 
 class MainPage extends StatefulWidget {
@@ -11,11 +11,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  List<Task> _taskList = [];
   late TextEditingController _controller = TextEditingController();
   bool _isVisibleTextField = false;
-  bool _isEpmtyError = false;
-  FocusNode focusNode = FocusNode();
+  bool _isEmptyError = false;
+  final FocusNode _focusNode = FocusNode();
 
   MaterialStateProperty<Color>? getColor(Color color, Color colorPressed) {
     final getColor = (Set<MaterialState> states) {
@@ -34,7 +33,6 @@ class _MainPageState extends State<MainPage> {
     super.initState();
 
     _controller = TextEditingController();
-    _taskList.add(Task('title'));
   }
 
   @override
@@ -48,6 +46,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final taskListWidget = TaskList.of(context)!;
+
     final appThemeState = ChangeAppTheme.of(context);
     return Scaffold(
       backgroundColor: appThemeState!.isDarkMode ? const Color(0xFF29292F) : null,
@@ -103,14 +104,14 @@ class _MainPageState extends State<MainPage> {
                         onPressed: () {
                             if (_isVisibleTextField) {
                               if (_controller.text.isNotEmpty) {
-                                _taskList.insert(0, Task(_controller.text));
+                                taskListWidget.addNewTask(0, _controller.text);
                                 _controller.clear();
-                                _isEpmtyError = false;
+                                _isEmptyError = false;
                               } else {
-                                _isEpmtyError = true;
+                                _isEmptyError = true;
                               }
                             } else {
-                              focusNode.requestFocus();
+                              _focusNode.requestFocus();
                             }
                             _isVisibleTextField = !_isVisibleTextField;
                             setState(() {});
@@ -137,12 +138,12 @@ class _MainPageState extends State<MainPage> {
                   style: TextStyle(
                     color: appThemeState.isDarkMode ? Colors.white : Colors.black,
                   ),
-                  focusNode: focusNode,
+                  focusNode: _focusNode,
                   controller: _controller,
                 ),
               ),
               Visibility(
-                  visible: _isEpmtyError,
+                  visible: _isEmptyError,
                   child: const Text(
                     "The task can't be empty",
                     style: TextStyle(color: Colors.red),
@@ -152,10 +153,10 @@ class _MainPageState extends State<MainPage> {
               ),
               Flexible(
                 child: ListView.builder(
-                    itemCount: _taskList.length,
+                    itemCount: taskListWidget.taskList.length,
                     itemBuilder: (context, index) {
                       return Dismissible(
-                        key: ObjectKey(_taskList[index]),
+                        key: ObjectKey(taskListWidget.taskList[index]),
                         background: Container(
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
@@ -167,7 +168,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                         onDismissed: (value) {
                           setState(() {
-                            _taskList.removeAt(index);
+                            taskListWidget.removeTask(index);
                           });
                         },
                         child: CheckboxListTile(
@@ -175,7 +176,7 @@ class _MainPageState extends State<MainPage> {
                           controlAffinity: ListTileControlAffinity.leading,
                           onChanged: (value) {
                             setState(() {
-                              _taskList[index].isChecked = value!;
+                              taskListWidget.changeCheckValue(index, value);
                             });
                           },
                           side: const BorderSide(
@@ -183,14 +184,14 @@ class _MainPageState extends State<MainPage> {
                             width: 2
                           ),
                           title: Text(
-                            _taskList[index].title,
+                            taskListWidget.taskList[index].title,
                             style: TextStyle(
                               color: appThemeState.isDarkMode
                                   ? Colors.white
                                   : Colors.black,
                             ),
                           ),
-                          value: _taskList[index].isChecked,
+                          value: taskListWidget.taskList[index].isChecked,
                         ),
                       );
                     }),
