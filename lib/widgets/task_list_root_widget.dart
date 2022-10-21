@@ -18,17 +18,27 @@ class TaskListRootWidget extends StatefulWidget {
 
 class _TaskListRootWidgetState extends State<TaskListRootWidget> {
 
-  List<Task>? taskList = [];
+  List<Task> taskList = [];
   void addNewTask(int index, String title) {
-    taskList!.insert(index, Task(title: title));
+    taskList.insert(index, Task(title: title));
   }
 
   void removeTask(int index) {
-    taskList!.removeAt(index);
+    taskList.removeAt(index);
   }
 
   void changeCheckValue(int index, bool isChecked) {
-    taskList![index].isChecked = isChecked;
+    taskList[index].isChecked = isChecked;
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    for(int i = 1; i < 21; i++) {
+      taskList.add(Task(title: 'task $i'));
+    }
   }
 
   @override
@@ -37,7 +47,7 @@ class _TaskListRootWidgetState extends State<TaskListRootWidget> {
         addNewTask: addNewTask,
         removeTask: removeTask,
         changeCheckValue: changeCheckValue,
-        taskList: taskList!,
+        taskList: taskList,
         child: MainPage()
     );
   }

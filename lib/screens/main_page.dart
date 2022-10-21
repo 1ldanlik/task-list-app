@@ -151,7 +151,7 @@ class _MainPageState extends State<MainPage> {
               const SizedBox(
                 height: 32,
               ),
-              Flexible(
+              Expanded(
                 child: ListView.builder(
                     itemCount: taskListWidget.taskList.length,
                     itemBuilder: (context, index) {
