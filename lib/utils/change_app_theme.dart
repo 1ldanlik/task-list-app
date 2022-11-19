@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ChangeAppTheme extends InheritedWidget {
-  final bool isDarkMode;
+  final ThemeMode themeMode;
   final Widget child;
   final Function toDarkMode;
   final Function toLightMode;
 
   const ChangeAppTheme({
     Key? key,
-    required this.isDarkMode,
+    required this.themeMode,
     required this.toDarkMode,
     required this.toLightMode,
     required this.child
@@ -16,7 +16,7 @@ class ChangeAppTheme extends InheritedWidget {
 
   @override
   bool updateShouldNotify(ChangeAppTheme oldWidget) {
-    return isDarkMode != oldWidget.isDarkMode;
+    return themeMode != oldWidget.themeMode;
   }
 
   static ChangeAppTheme? of(BuildContext context) {

@@ -15,26 +15,28 @@ class RootWidget extends StatefulWidget {
 }
 
 class _RootWidgetState extends State<RootWidget> {
-  bool isDarkMode = false;
+  // bool isDarkMode = false;
+
+  ThemeMode _themeMode = ThemeMode.light;
 
   void toDarkMode() {
     debugPrint('[[[[[[[[[[[[[[[[[[[[[[[[[[[[[');
     setState(() {
-      isDarkMode = true;
+      _themeMode = ThemeMode.dark;
     });
   }
 
   void toLightMode() {
     debugPrint('}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}');
     setState(() {
-      isDarkMode = false;
+      _themeMode = ThemeMode.light;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ChangeAppTheme(
-      isDarkMode: isDarkMode,
+      themeMode: _themeMode,
       toDarkMode: toDarkMode,
       toLightMode: toLightMode,
       child: const MyApp(),
