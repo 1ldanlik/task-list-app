@@ -1,18 +1,40 @@
 
-class Task {
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
+
+class Task extends HiveObject {
   Task({
-    required this.title, this.isChecked = false
+    required this.id,
+    required this.title,
+    this.isChecked = false,
   });
 
+  @HiveField(0)
+  final String id;
+
+  @HiveField(1)
   String title;
+
+  @HiveField(2)
   bool isChecked;
 
-  bool operator ==(dynamic other) {
-    return (other is Task && other.title == title
-        && other.isChecked == isChecked);
-  }
+  factory Task.create({
+    required String? title,
+  }) =>
+      Task(
+        id: const Uuid().v1(),
+        title: title ?? "",
+        isChecked: false,
+      );
 
-  @override
-  int get hashCode => Object.hash(title.hashCode, isChecked.hashCode);
+
+// @override
+// bool operator ==(dynamic other) {
+//   return (other is Task && other.title == title
+//       && other.isChecked == isChecked);
+// }
+
+// @override
+// int get hashCode => Object.hash(title.hashCode, isChecked.hashCode);
 
 }

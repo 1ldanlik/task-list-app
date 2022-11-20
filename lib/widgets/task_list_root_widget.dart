@@ -20,7 +20,7 @@ class _TaskListRootWidgetState extends State<TaskListRootWidget> {
 
   List<Task> taskList = [];
   void addNewTask(int index, String title) {
-    taskList.insert(index, Task(title: title));
+    // taskList.insert(index, Task(title: title));
   }
 
   void removeTask(int index) {
@@ -37,7 +37,7 @@ class _TaskListRootWidgetState extends State<TaskListRootWidget> {
     super.initState();
 
     for(int i = 1; i < 21; i++) {
-      taskList.add(Task(title: 'task $i'));
+      // taskList.add(Task(title: 'task $i'));
     }
   }
 
