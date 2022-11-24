@@ -2,6 +2,9 @@
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
+part 'task.g.dart';
+
+@HiveType(typeId: 0)
 class Task extends HiveObject {
   Task({
     required this.id,

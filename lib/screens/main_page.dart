@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_list_app/main.dart';
+import 'package:task_list_app/provider/tasks_provider.dart';
 import 'package:task_list_app/utils/task_list.dart';
 
+import '../entity/task.dart';
 import '../utils/change_app_theme.dart';
 
 class MainPage extends StatefulWidget {
@@ -47,6 +50,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final TasksModel tasksModel = context.read<TasksModel>();
 
     final taskListWidget = TaskList.of(context)!;
 
@@ -105,7 +110,8 @@ class _MainPageState extends State<MainPage> {
                         onPressed: () {
                           if (_isVisibleTextField) {
                             if (_controller.text.isNotEmpty) {
-                              taskListWidget.addNewTask(0, _controller.text);
+                              tasksModel.addTask(Task.create(title: _controller.text));
+                              debugPrint('================' + tasksModel.list.toString());
                               _controller.clear();
                               _isEmptyError = false;
                             } else {
@@ -154,10 +160,10 @@ class _MainPageState extends State<MainPage> {
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: taskListWidget.taskList.length,
+                    itemCount: tasksModel.list.length,
                     itemBuilder: (context, index) {
                       return Dismissible(
-                        key: ObjectKey(taskListWidget.taskList[index]),
+                        key: ObjectKey(tasksModel.list[index]),
                         background: Container(
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
@@ -169,7 +175,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                         onDismissed: (value) {
                           setState(() {
-                            taskListWidget.removeTask(index);
+                            tasksModel.removeTask(tasksModel.list[index]);
                           });
                         },
                         child: CheckboxListTile(
@@ -185,17 +191,17 @@ class _MainPageState extends State<MainPage> {
                               width: 2
                           ),
                           title: Text(
-                            taskListWidget.taskList[index].title,
+                            tasksModel.list[index].title,
                             style: TextStyle(
                               color: appThemeState.themeMode == ThemeMode.dark
                                   ? Colors.white
                                   : Colors.black,
                             ),
                           ),
-                          value: taskListWidget.taskList[index].isChecked,
+                          value: tasksModel.list[index].isChecked,
                         ),
                       );
-                    }),
+                    },),
               ),
               const SizedBox(
                 height: 32,
