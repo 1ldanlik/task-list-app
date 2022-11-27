@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_list_app/screens/main_page.dart';
 import 'package:task_list_app/utils/task_list.dart';
 
-import '../entity/task.dart';
+import '../entity/task/task.dart';
 
 class TaskListRootWidget extends StatefulWidget {
   const TaskListRootWidget({

@@ -7,7 +7,7 @@ import 'package:task_list_app/screens/main_page.dart';
 import 'package:task_list_app/widgets/root_widget.dart';
 import 'package:task_list_app/widgets/task_list_root_widget.dart';
 
-import 'entity/task.dart';
+import 'entity/task/task.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -41,8 +41,15 @@ class _MyAppState extends State<MyApp> {
 
     final model = TasksModel();
 
-    return ChangeNotifierProvider<TasksModel>(
-      create: (context) => model,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => model,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => model,
+        ),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(),

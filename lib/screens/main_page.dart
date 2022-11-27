@@ -4,7 +4,7 @@ import 'package:task_list_app/main.dart';
 import 'package:task_list_app/provider/tasks_provider.dart';
 import 'package:task_list_app/utils/task_list.dart';
 
-import '../entity/task.dart';
+import '../entity/task/task.dart';
 import '../utils/change_app_theme.dart';
 
 class MainPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../entity/task.dart';
+import '../entity/task/task.dart';
 
 class TasksModel extends ChangeNotifier {
   var box = Hive.box<Task>('taskBox');

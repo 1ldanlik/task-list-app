@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task_list_app/entity/task.dart';
+import 'package:task_list_app/entity/task/task.dart';
 
 class TaskList extends InheritedWidget{
   const TaskList({
