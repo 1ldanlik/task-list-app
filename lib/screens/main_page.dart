@@ -1,11 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_list_app/main.dart';
 import 'package:task_list_app/provider/tasks_provider.dart';
-import 'package:task_list_app/utils/task_list.dart';
 
 import '../entity/task/task.dart';
-import '../utils/change_app_theme.dart';
+import '../provider/theme_provider.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -52,29 +51,27 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
 
     final TasksModel tasksModel = context.read<TasksModel>();
+    final ThemeModel themeModel = context.read<ThemeModel>();
 
-    final taskListWidget = TaskList.of(context)!;
-
-    final appThemeState = ChangeAppTheme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Task list',
           style: TextStyle(
-            color: appThemeState!.themeMode == ThemeMode.dark ? Colors.white : Colors.black,
+            color: themeModel.isDark ? Colors.white : Colors.black,
           ),
         ),
         actions: [
           IconButton(
             onPressed: () {
-              appThemeState.themeMode == ThemeMode.dark
-                  ? appThemeState.toLightMode()
-                  : appThemeState.toDarkMode();
-              MyApp.of(context)!.changeTheme(appThemeState.themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
+              themeModel.isDark
+                  ? themeModel.isDark = false
+                  : themeModel.isDark = true;
+              debugPrint(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ' + themeModel.isDark.toString());
             },
             icon: Icon(
-              appThemeState.themeMode == ThemeMode.dark ? Icons.mode_night : Icons.sunny,
-              color: appThemeState.themeMode == ThemeMode.dark ? Colors.white : Colors.black,
+              themeModel.isDark ? Icons.mode_night : Icons.sunny,
+              color: themeModel.isDark ? Colors.white : Colors.black,
             ),
           )
         ],
@@ -94,7 +91,7 @@ class _MainPageState extends State<MainPage> {
                     style: TextStyle(
                       fontSize: 56,
                       fontWeight: FontWeight.w800,
-                      color: appThemeState.themeMode == ThemeMode.dark
+                      color: themeModel.isDark
                           ? Colors.white
                           : Colors.black,
                     ),
@@ -143,7 +140,7 @@ class _MainPageState extends State<MainPage> {
                 visible: _isVisibleTextField,
                 child: TextField(
                   style: TextStyle(
-                    color: appThemeState.themeMode == ThemeMode.dark ? Colors.white : Colors.black,
+                    color: themeModel.isDark ? Colors.white : Colors.black,
                   ),
                   focusNode: _focusNode,
                   controller: _controller,
@@ -183,7 +180,7 @@ class _MainPageState extends State<MainPage> {
                           controlAffinity: ListTileControlAffinity.leading,
                           onChanged: (value) {
                             setState(() {
-                              taskListWidget.changeCheckValue(index, value);
+                              tasksModel.changeSelection(tasksModel.list[index]);
                             });
                           },
                           side: const BorderSide(
@@ -193,7 +190,7 @@ class _MainPageState extends State<MainPage> {
                           title: Text(
                             tasksModel.list[index].title,
                             style: TextStyle(
-                              color: appThemeState.themeMode == ThemeMode.dark
+                              color: themeModel.isDark
                                   ? Colors.white
                                   : Colors.black,
                             ),

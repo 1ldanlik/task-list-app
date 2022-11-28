@@ -8,6 +8,7 @@ import 'package:task_list_app/widgets/root_widget.dart';
 import 'package:task_list_app/widgets/task_list_root_widget.dart';
 
 import 'entity/task/task.dart';
+import 'provider/theme_provider.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -16,49 +17,36 @@ void main() async {
   runApp(const RootWidget(child: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
-
-  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
-}
-
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
-
-  ThemeMode _themeMode = ThemeMode.light;
-
-  void changeTheme(ThemeMode themeMode) {
-    setState(() {
-      _themeMode = themeMode;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-
-    final model = TasksModel();
+    final taskModel = TasksModel();
+    final themeModel = ThemeModel();
 
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => model,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => model,
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(),
-        darkTheme: ThemeData.dark(),
-        themeMode: _themeMode,
-        home: TaskListRootWidget(
-          child: MainPage(),
-        ),
-      ),
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => taskModel,
+          ),
+          ChangeNotifierProvider(
+            create: (_) => themeModel,
+          ),
+        ],
+        child: Consumer<ThemeModel>(
+          builder: (context, ThemeModel themeNotifier, child) {
+
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: ThemeData(),
+              darkTheme: ThemeData.dark(),
+              themeMode: themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
+              home: TaskListRootWidget(
+                child: MainPage(),
+              ),
+            );
+          },)
     );
   }
 }

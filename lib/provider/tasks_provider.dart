@@ -14,14 +14,24 @@ class TasksModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  addTask(Task task) {
+  void changeSelection(Task task) {
+    final indexOfTask = list.indexOf(task);
+    list[indexOfTask].isChecked = task.isChecked;
+
+    task.isChecked = !task.isChecked;
+    box.put(task.key, task);
+
+    notifyListeners();
+  }
+
+  void addTask(Task task) {
     list.add(task);
     box.add(task);
 
     notifyListeners();
   }
 
-  removeTask(Task task) {
+  void removeTask(Task task) {
     list.remove(task);
     box.delete(task);
 
