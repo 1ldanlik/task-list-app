@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_list_app/provider/tasks_provider.dart';
+import 'package:task_list_app/screens/main_page/component/add_button_component.dart';
+import 'package:task_list_app/screens/main_page/component/tasks_list_component.dart';
 
 import '../../entity/task/task.dart';
 import '../../provider/theme_provider.dart';
@@ -19,17 +21,7 @@ class _MainPageState extends State<MainPage> {
   bool _isEmptyError = false;
   final FocusNode _focusNode = FocusNode();
 
-  MaterialStateProperty<Color>? getColor(Color color, Color colorPressed) {
-    final getColor = (Set<MaterialState> states) {
-      if (states.contains(MaterialState.pressed)) {
-        return colorPressed;
-      } else {
-        return color;
-      }
-    };
 
-    return MaterialStateProperty.resolveWith(getColor);
-  }
 
   @override
   void initState() {
@@ -67,7 +59,6 @@ class _MainPageState extends State<MainPage> {
               themeModel.isDark
                   ? themeModel.isDark = false
                   : themeModel.isDark = true;
-              debugPrint(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ' + themeModel.isDark.toString());
             },
             icon: Icon(
               themeModel.isDark ? Icons.mode_night : Icons.sunny,
@@ -96,37 +87,21 @@ class _MainPageState extends State<MainPage> {
                           : Colors.black,
                     ),
                   ),
-                  SizedBox(
-                    width: 46,
-                    height: 46,
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(EdgeInsets.zero),
-                            backgroundColor: getColor(const Color(0xFFF2F3FF),
-                                const Color(0xFFD6F0BF))),
-                        onPressed: () {
-                          if (_isVisibleTextField) {
-                            if (_controller.text.isNotEmpty) {
-                              tasksModel.addTask(Task.create(title: _controller.text));
-                              debugPrint('================' + tasksModel.list.toString());
-                              _controller.clear();
-                              _isEmptyError = false;
-                            } else {
-                              _isEmptyError = true;
-                            }
-                          } else {
-                            _focusNode.requestFocus();
-                          }
-                          _isVisibleTextField = !_isVisibleTextField;
-                          setState(() {});
-                        },
-                        child: const Center(
-                            child: Icon(
-                              Icons.add,
-                              color: Color(0xFF575767),
-                              size: 36,
-                            ))),
-                  )
+                  AddButtonComponent(onPressed: () {
+                    if (_isVisibleTextField) {
+                      if (_controller.text.isNotEmpty) {
+                        tasksModel.addTask(Task.create(title: _controller.text));
+                        _controller.clear();
+                        _isEmptyError = false;
+                      } else {
+                        _isEmptyError = true;
+                      }
+                    } else {
+                      _focusNode.requestFocus();
+                    }
+                    _isVisibleTextField = !_isVisibleTextField;
+                    setState(() {});
+                  },)
                 ],
               ),
               const SizedBox(
@@ -155,52 +130,8 @@ class _MainPageState extends State<MainPage> {
               const SizedBox(
                 height: 32,
               ),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: tasksModel.list.length,
-                    itemBuilder: (context, index) {
-                      return Dismissible(
-                        key: ObjectKey(tasksModel.list[index]),
-                        background: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
-                          color: Colors.red,
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onDismissed: (value) {
-                          setState(() {
-                            tasksModel.removeTask(tasksModel.list[index]);
-                            debugPrint('sdsfsfsdfsdfsfs___' + tasksModel.list.toString());
-                            debugPrint('sdsfsfsdfsdfsfs+++' + tasksModel.box.values.toString());
-                          });
-                        },
-                        child: CheckboxListTile(
-                          activeColor: Colors.grey,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (value) {
-                            setState(() {
-                              tasksModel.changeSelection(tasksModel.list[index]);
-                            });
-                          },
-                          side: const BorderSide(
-                              color: Colors.grey,
-                              width: 2
-                          ),
-                          title: Text(
-                            tasksModel.list[index].title,
-                            style: TextStyle(
-                              color: themeModel.isDark
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                          value: tasksModel.list[index].isChecked,
-                        ),
-                      );
-                    },),
+              const Expanded(
+                child: TasksListComponent(),
               ),
               const SizedBox(
                 height: 32,
