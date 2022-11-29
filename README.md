@@ -4,9 +4,11 @@
 
 ## Task
 1. Your app's screen should match the layout: https://www.figma.com/file/VTiPXedx9yZDpU8taS9yo3/Task-List
-
 2. The function of adding new tasks should be present: when you click on the "+" button, a new task appears at the beginning of the list with a one-line input field and the keyboard opens to fill in the task name, when you press Enter or close the keyboard, the task is saved.
-
 3. There should be a function for changing the status of the task "completed" and "not completed" in both directions: when you click on the uncompleted task, the checkbox becomes marked, when you click on the completed task, the checkbox accordingly becomes inactive.
-
 4. Data with a list of tasks must be in the application store, it is allowed to use any option at your discretion. It is desirable that the storage is permanent, but you can also use temporary storage.
+
+## Main used libraries
+- provider
+- hive
+- shared_preferences
