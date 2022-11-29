@@ -6,17 +6,19 @@ import '../entity/task/task.dart';
 
 class TasksModel extends ChangeNotifier {
   var box = Hive.box<Task>('taskBox');
-  List<Task> list = [];
+  List<Task> _list = [];
+
+  List<Task> get list => _list;
 
   TasksModel() {
-    list = box.values.toList();
+    _list = box.values.toList();
 
     notifyListeners();
   }
 
   void changeSelection(Task task) {
-    final indexOfTask = list.indexOf(task);
-    list[indexOfTask].isChecked = task.isChecked;
+    final indexOfTask = _list.indexOf(task);
+    _list[indexOfTask].isChecked = task.isChecked;
 
     task.isChecked = !task.isChecked;
     box.put(task.key, task);
@@ -25,15 +27,15 @@ class TasksModel extends ChangeNotifier {
   }
 
   void addTask(Task task) {
-    list.add(task);
+    _list.add(task);
     box.add(task);
 
     notifyListeners();
   }
 
   void removeTask(Task task) {
-    list.remove(task);
-    box.delete(task);
+    _list.remove(task);
+    box.deleteAt(task.key);
 
     notifyListeners();
   }

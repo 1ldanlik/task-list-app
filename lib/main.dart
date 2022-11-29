@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:task_list_app/provider/tasks_provider.dart';
-import 'package:task_list_app/screens/main_page.dart';
-import 'package:task_list_app/widgets/root_widget.dart';
-import 'package:task_list_app/widgets/task_list_root_widget.dart';
+import 'package:task_list_app/screens/main_page/main_page.dart';
 
 import 'entity/task/task.dart';
 import 'provider/theme_provider.dart';
+import 'theme/theme.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskAdapter());
   await Hive.openBox<Task>('taskBox');
-  runApp(const RootWidget(child: MyApp()));
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -39,12 +39,8 @@ class MyApp extends StatelessWidget {
 
             return MaterialApp(
               title: 'Flutter Demo',
-              theme: ThemeData(),
-              darkTheme: ThemeData.dark(),
-              themeMode: themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
-              home: TaskListRootWidget(
-                child: MainPage(),
-              ),
+              theme: themeNotifier.isDark ? TaskListAppTheme.dark : TaskListAppTheme.light,
+              home: MainPage(),
             );
           },)
     );

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_list_app/provider/tasks_provider.dart';
 
-import '../entity/task/task.dart';
-import '../provider/theme_provider.dart';
+import '../../entity/task/task.dart';
+import '../../provider/theme_provider.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key? key}) : super(key: key);
@@ -173,6 +173,8 @@ class _MainPageState extends State<MainPage> {
                         onDismissed: (value) {
                           setState(() {
                             tasksModel.removeTask(tasksModel.list[index]);
+                            debugPrint('sdsfsfsdfsdfsfs___' + tasksModel.list.toString());
+                            debugPrint('sdsfsfsdfsdfsfs+++' + tasksModel.box.values.toString());
                           });
                         },
                         child: CheckboxListTile(
