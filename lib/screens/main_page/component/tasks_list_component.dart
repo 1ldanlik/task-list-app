@@ -17,7 +17,7 @@ class _TasksListComponentState extends State<TasksListComponent> {
   @override
   Widget build(BuildContext context) {
     final TasksModel tasksModel = context.watch<TasksModel>();
-    final ThemeModel themeModel = context.read<ThemeModel>();
+    final ThemeModel themeModel = context.watch<ThemeModel>();
 
     return ListView.builder(
       itemCount: tasksModel.list.length,

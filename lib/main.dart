@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
           builder: (context, ThemeModel themeNotifier, child) {
 
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
               theme: themeNotifier.isDark ? TaskListAppTheme.dark : TaskListAppTheme.light,
               home: MainPage(),

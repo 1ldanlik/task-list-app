@@ -6,11 +6,6 @@ part 'task.g.dart';
 
 @HiveType(typeId: 0)
 class Task extends HiveObject {
-  Task({
-    required this.id,
-    required this.title,
-    this.isChecked = false,
-  });
 
   @HiveField(0)
   final String id;
@@ -20,6 +15,12 @@ class Task extends HiveObject {
 
   @HiveField(2)
   bool isChecked;
+
+  Task({
+    required this.id,
+    required this.title,
+    this.isChecked = false,
+  });
 
   factory Task.create({
     required String? title,
